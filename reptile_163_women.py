@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 import requests
 import json
+from pyecharts import Bar
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 url = "http://music.163.com/weapi/v1/resource/comments/R_SO_4_551816010?csrf_token="
 
@@ -34,3 +37,14 @@ for hot_comment in data['hotComments']:
 nickname_list = [comment['nickname'] for comment in hot_comment_list]
 content_list = [comment['content'] for comment in hot_comment_list]
 liked_count_list = [comment['liked_count'] for comment in hot_comment_list]
+
+# bar = Bar("热评中点赞数示例图")
+# bar.add("点赞数", nickname_list, liked_count_list, is_stack=True, mark_line=['min', 'max'], mark_point=['average'])
+# bar.render()
+
+content_text = " ".join(content_list)
+word_cloud = WordCloud(font_path="/Library/Fonts/Arial Unicode.ttf", max_words=200).generate(content_text)
+plt.figure()
+plt.imshow(word_cloud, interpolation='bilinear');
+plt.axis('off')
+plt.show()
