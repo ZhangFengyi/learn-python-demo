@@ -8,7 +8,7 @@ import sys
 # 初始化
 pg.init()
 # 设置屏幕大小
-scr = pg.display.set_mode((600, 500))
+scr = pg.display.set_mode([600, 500])
 # 设置标题
 pg.display.set_caption(("打乒乓球"))
 # 颜色定义
@@ -27,8 +27,10 @@ vy = 1
 a = 200
 
 # 字体
-zt1 = pg.font.SysFont("Arial Unicode", 24)
-zt2 = pg.font.SysFont("Arial Unicode", 20)
+# zt1 = pg.font.SysFont("", 24)
+# zt2 = pg.font.SysFont("", 20)
+zt1 = pg.font.Font("/Library/Fonts/Arial Unicode.ttf", 24)
+zt2 = pg.font.Font("/Library/Fonts/Arial Unicode.ttf", 20)
 
 
 def print_text(font, text, x, y, color):
@@ -56,21 +58,20 @@ while True:
     # 深度为0，实心圆
     pg.draw.circle(scr, pp, (x, y), 40, 0)
     # 长宽分别为100，20的球拍
-    pg.draw.rect(scr, green, (a, 530, 100, 20), 0)
+    pg.draw.rect(scr, green, (a, 475, 100, 20), 0)
     # 球碰到左右屏幕边缘，vx 取反
     # 碰到上边缘或者球拍，vy 取反
     # 其余情况表示球拍没有碰到球，跳出循环，游戏结束
     x = x + vx
     y = y + vy
-    if x > 550 or x < 40:
+    if x >= 560 or x <= 40:
         vx = -vx
-    if y < 40:
+    if y <= 40:
         vy = -vy
-    if y > 510 and abs(a - x + 50) < 50:
-        if vy > 0:
-            vy = -vy
-        else:
-            pass
+    # 是否接到球判断
+    elif y >= 435 and (0 <= x - a <= 100):
+        # 变向
+        vy = -vy
         # 每接到球一次，接到次数加一
         c = c + 1
         # 每接到球一次，添加得分数
@@ -79,7 +80,7 @@ while True:
         if c >= 3:
             c = 0
             # 加速一次，基础分翻倍
-            k = k + k
+            k = k * 2
             # 加速
             if vx > 0:
                 vx = vx + 1
@@ -87,7 +88,7 @@ while True:
                 vx = vx - 1
         else:
             pass
-    elif y > 510 and abs(a - x + 50) > 50:
+    elif y >= 435 and (x - a < 0 or x - a > 100):
         break
     else:
         pass
@@ -100,8 +101,10 @@ while True:
 
 # 游戏结束，改变背景色
 scr.fill((211, 21, 33))
-zt3 = pg.font.SysFont("Arial Unicode", 120)
-zt4 = pg.font.SysFont("Arial Unicode", 60)
+# zt3 = pg.font.SysFont("Arial Unicode.ttf", 120)
+# zt4 = pg.font.SysFont("Arial Unicode.ttf", 60)
+zt3 = pg.font.Font("/Library/Fonts/Arial Unicode.ttf", 120)
+zt4 = pg.font.Font("/Library/Fonts/Arial Unicode.ttf", 60)
 print_text(zt3, "游戏结束", 60, 120, white)
 print_text(zt4, "得分：" + str(fs), 120, 400, white)
 pg.display.update()
